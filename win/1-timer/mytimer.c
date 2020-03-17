@@ -17,7 +17,7 @@
 
 #define _SECOND		10000000
 #define TIMEOUT		(-2 * _SECOND)
-
+#define INF 100000000000
 
 /*
  * rutina APC asociata timer-ului
@@ -27,6 +27,13 @@ static VOID CALLBACK TimerAPCProc(LPVOID lpArgToCompletionRoutine,
 		DWORD dwTimerLowValue, DWORD dwTimerHighValue)
 {
 	/* TODO: Use ctime and time to print current time. */
+
+	time_t crtTime = time(NULL);
+	UNREFERENCED_PARAMETER(lpArgToCompletionRoutine);
+	UNREFERENCED_PARAMETER(dwTimerLowValue);
+	UNREFERENCED_PARAMETER(dwTimerHighValue);
+
+	printf("ctime: %s\n", ctime(&crtTime));
 }
 
 /*
@@ -36,6 +43,22 @@ static VOID CALLBACK TimerAPCProc(LPVOID lpArgToCompletionRoutine,
 static void InitSetTimer(void)
 {
 	/* TODO */
+	HANDLE hTimer;
+	LARGE_INTEGER dueTime;
+	BOOL bRet;
+
+	hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
+	if (hTimer == NULL) {
+		printf("CreateWritableTimer\n");
+		exit(1);
+	} 
+
+	dueTime.QuadPart = TIMEOUT;
+
+	bRet = SetWaitableTimer(hTimer, &dueTime, 2000, TimerAPCProc, NULL, FALSE);
+	if (bRet == FALSE) {
+		printf("SetWaitableTimer");	
+	} 
 }
 
 int main(void)
@@ -44,6 +67,7 @@ int main(void)
 
 	while (1) {
 		/* TODO: Wait for timer (use SleepEx function). */
+		SleepEx(INF, TRUE);
 	}
 
 	return 0;
