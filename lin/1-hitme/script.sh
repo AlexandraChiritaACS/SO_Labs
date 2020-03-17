@@ -1,0 +1,6 @@
+kill -20 $(pidof hitme)
+kill -21 $(pidof hitme)
+kill -22 $(pidof hitme)
+kill -23 $(pidof hitme)
+kill -24 $(pidof hitme)
+kill -25 $(pidof hitme)
